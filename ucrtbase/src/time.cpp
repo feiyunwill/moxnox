@@ -111,6 +111,9 @@ constexpr errno_t constexpr__gmtime64_s(tm* tm, const __time64_t* t) {
 
     tm->tm_yday = (month_index < 10) ? (int)(day_of_year + 59 + leap) : (int)(day_of_year - 306);
 
+    tm->tm_gmtoff = 0;
+    tm->tm_zone = "UTC";
+
     return 0;
 }
 
