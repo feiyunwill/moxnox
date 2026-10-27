@@ -7,9 +7,12 @@
 typedef long __time32_t;
 typedef long long __time64_t;
 typedef __time64_t time_t;
-typedef long clock_t;
 
-#define CLOCKS_PER_SEC 1000
+// long on Windows
+typedef long long clock_t;
+
+// 1000 on Windows, but XSI requires 1000000
+#define CLOCKS_PER_SEC ((clock_t)1000000)
 
 struct tm {
     int tm_sec;

@@ -46,6 +46,8 @@ clock_t clock() {
 
     NtQuerySystemTime(&now);
 
+    // CLOCKS_PER_SEC is different on Windows
+
     return (clock_t)(((uint64_t)now.QuadPart - init_time) / (SYSTEM_TIME_RESOLUTION / CLOCKS_PER_SEC));
 }
 
