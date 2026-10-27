@@ -3,7 +3,7 @@
 
 #include <stddef.h>
 
-typedef int regoff_t;
+typedef ssize_t regoff_t;
 
 typedef struct {
     size_t re_nsub;
