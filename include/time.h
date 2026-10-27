@@ -2,6 +2,7 @@
 #pragma once
 
 #include <stddef.h>
+#include <sys/types.h>
 
 typedef long __time32_t;
 typedef long long __time64_t;
@@ -27,7 +28,7 @@ struct tm {
 
 struct timeval {
     time_t tv_sec;
-    long tv_usec;
+    suseconds_t tv_usec;
 };
 
 struct timespec {

@@ -40,6 +40,7 @@ typedef uint64_t fsfilcnt_t;
 typedef int64_t blksize_t;
 typedef int64_t blkcnt_t;
 typedef uint32_t nlink_t;
+typedef long suseconds_t;
 
 #if __SIZEOF_POINTER__ == 8
 typedef long long ssize_t;
