@@ -37,8 +37,8 @@ typedef uintptr_t pthread_rwlockattr_t; // FIXME?
 typedef uintptr_t pthread_barrier_t; // FIXME?
 typedef uint64_t fsblkcnt_t;
 typedef uint64_t fsfilcnt_t;
-typedef uint64_t blksize_t;
-typedef uint64_t blkcnt_t;
+typedef int64_t blksize_t;
+typedef int64_t blkcnt_t;
 typedef uint32_t nlink_t;
 
 #if __SIZEOF_POINTER__ == 8
