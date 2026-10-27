@@ -765,25 +765,26 @@ static size_t do_strftime(T* s, size_t max, const T* format, const struct ::tm* 
             break;
 
             case 'z': { // timezone offset
-                // FIXME - get from extended struct tm
+                if (tm->tm_isdst < 0)
+                    break;
 
-                if constexpr (is_same_v<T, char>) {
-                    static const string_view TZOFF = "+0000";
+                uint32_t num = tm->tm_gmtoff < 0 ? -tm->tm_gmtoff : tm->tm_gmtoff;
 
-                    if (sp.size() < TZOFF.size())
-                        return 0;
+                num = ((num / 3600) * 100) + ((num / 60) % 60);
 
-                    memcpy(sp.data(), TZOFF.data(), TZOFF.size());
-                    sp = span(sp.data() + TZOFF.size(), sp.size() - TZOFF.size());
-                } else {
-                    static const wstring_view TZOFF = L"+0000";
+                if (num > 2359)
+                    return 0;
 
-                    if (sp.size() < TZOFF.size())
-                        return 0;
+                if (sp.size() < 5)
+                    return 0;
 
-                    memcpy(sp.data(), TZOFF.data(), TZOFF.size() * sizeof(wchar_t));
-                    sp = span(sp.data() + TZOFF.size(), sp.size() - TZOFF.size());
-                }
+                sp[0] = tm->tm_gmtoff < 0 ? '-' : '+';
+                sp[1] = (T)((num / 1000) + '0');
+                sp[2] = (T)(((num / 100) % 10) + '0');
+                sp[3] = (T)(((num / 10) % 10) + '0');
+                sp[4] = (T)((num % 10) + '0');
+
+                sp = span(sp.data() + 5, sp.size() - 5);
 
                 break;
             }
