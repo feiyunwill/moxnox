@@ -10,8 +10,6 @@ typedef long clock_t;
 
 #define CLOCKS_PER_SEC 1000
 
-#ifndef _TM_DEFINED // FIXME
-#define _TM_DEFINED
 struct tm {
     int tm_sec;
     int tm_min;
@@ -23,23 +21,16 @@ struct tm {
     int tm_yday;
     int tm_isdst;
 };
-#endif
 
-#ifndef _TIMEVAL_DEFINED // FIXME
-#define _TIMEVAL_DEFINED
 struct timeval {
     time_t tv_sec;
     long tv_usec;
 };
-#endif
 
-#ifndef _TIMESPEC_DEFINED // FIXME
-#define _TIMESPEC_DEFINED
 struct timespec {
     time_t tv_sec;
     long tv_nsec;
 };
-#endif
 
 typedef int clockid_t;
 
