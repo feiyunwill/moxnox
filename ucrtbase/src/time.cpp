@@ -13,6 +13,7 @@ export module time;
 
 import nt;
 import ucrtbase;
+import unicode;
 
 using namespace std;
 
@@ -788,24 +789,25 @@ static size_t do_strftime(T* s, size_t max, const T* format, const struct ::tm* 
             }
 
             case 'Z': { // timezone name
-                // FIXME - get from extended struct tm
+                if (!tm->tm_zone)
+                    break;
+
+                string_view tz = tm->tm_zone;
 
                 if constexpr (is_same_v<T, char>) {
-                    static const string_view TZNAME = "UTC";
-
-                    if (sp.size() < TZNAME.size())
+                    if (sp.size() < tz.size())
                         return 0;
 
-                    memcpy(sp.data(), TZNAME.data(), TZNAME.size());
-                    sp = span(sp.data() + TZNAME.size(), sp.size() - TZNAME.size());
+                    memcpy(sp.data(), tz.data(), tz.size());
+                    sp = span(sp.data() + tz.size(), sp.size() - tz.size());
                 } else {
-                    static const wstring_view TZNAME = L"UTC";
+                    auto u16len = utf8_to_utf16_len(tz);
 
-                    if (sp.size() < TZNAME.size())
+                    if (sp.size() < u16len)
                         return 0;
 
-                    memcpy(sp.data(), TZNAME.data(), TZNAME.size() * sizeof(wchar_t));
-                    sp = span(sp.data() + TZNAME.size(), sp.size() - TZNAME.size());
+                    utf8_to_utf16(span((char16_t*)sp.data(), sp.size()), tz);
+                    sp = span(sp.data() + u16len, sp.size() - u16len);
                 }
 
                 break;
