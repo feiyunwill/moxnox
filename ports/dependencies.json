@@ -55,6 +55,7 @@
     "rust": [],
     "sed": ["gnulib"],
     "tar": ["gnulib", "libiconv"],
+    "tzdb": [],
     "vim": ["ncurses"],
     "wget": ["gnulib", "libiconv", "openssl", "zlib"],
     "xkeyboard-config": [],

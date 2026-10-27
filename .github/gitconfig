@@ -184,3 +184,5 @@
 	insteadOf = https://github.com/xkbcommon/libxkbcommon
 [url "https://git.burntcomma.com/moxnox/xkeyboard-config"]
 	insteadOf = https://gitlab.freedesktop.org/xkeyboard-config/xkeyboard-config
+[url "https://git.burntcomma.com/moxnox/tz"]
+	insteadOf = https://github.com/eggert/tz.git

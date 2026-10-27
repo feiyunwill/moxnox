@@ -241,3 +241,6 @@
 [submodule "ports/xkeyboard-config/repo"]
 	path = ports/xkeyboard-config/repo
 	url = https://gitlab.freedesktop.org/xkeyboard-config/xkeyboard-config
+[submodule "ports/tzdb/repo"]
+	path = ports/tzdb/repo
+	url = https://github.com/eggert/tz.git
