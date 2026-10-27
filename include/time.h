@@ -20,6 +20,9 @@ struct tm {
     int tm_wday;
     int tm_yday;
     int tm_isdst;
+    // Windows doesn't have these last two fields
+    long tm_gmtoff;
+    const char* tm_zone;
 };
 
 struct timeval {
