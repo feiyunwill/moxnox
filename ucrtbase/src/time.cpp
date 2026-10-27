@@ -914,6 +914,9 @@ static constexpr __time64_t do_mktime(tm* tm) {
 
     t.tm_isdst = 0; // FIXME?
 
+    t.tm_gmtoff = tm2.tm_gmtoff;
+    t.tm_zone = tm2.tm_zone;
+
     return ret;
 }
 
