@@ -156,10 +156,10 @@ index 62b2cdee6..20b642efb 100644
          pub use self::nto::*;
 diff --git a/src/unix/moxnox/mod.rs b/src/unix/moxnox/mod.rs
 new file mode 100644
-index 000000000..b2446e228
+index 000000000..bac10587d
 --- /dev/null
 +++ b/src/unix/moxnox/mod.rs
-@@ -0,0 +1,1461 @@
+@@ -0,0 +1,1463 @@
 +//! Definitions for Moxnox: PE/COFF and the Windows ABI, but a POSIX 2024
 +//! userland (mnposix/ucrtbase). Transcribed from the platform's include/
 +//! headers, which are the source of truth. Note LLP64: c_long is 32-bit.
@@ -174,15 +174,15 @@ index 000000000..b2446e228
 +pub type mode_t = u16;
 +pub type pid_t = c_int;
 +pub type time_t = c_longlong;
-+pub type clock_t = c_long;
++pub type clock_t = c_longlong;
 +pub type clockid_t = c_int;
 +pub type uid_t = u32;
 +pub type gid_t = u32;
 +pub type id_t = u32;
 +pub type useconds_t = c_uint;
 +pub type suseconds_t = c_long;
-+pub type blkcnt_t = u64;
-+pub type blksize_t = u64;
++pub type blkcnt_t = i64;
++pub type blksize_t = i64;
 +pub type fsblkcnt_t = u64;
 +pub type fsfilcnt_t = u64;
 +pub type nlink_t = u32;
@@ -198,7 +198,7 @@ index 000000000..b2446e228
 +pub type wctrans_t = wchar_t;
 +pub type mbstate_t = c_int;
 +pub type nl_item = c_int;
-+pub type regoff_t = c_int;
++pub type regoff_t = ssize_t;
 +
 +pub type pthread_t = uintptr_t;
 +pub type pthread_key_t = size_t;
@@ -317,6 +317,8 @@ index 000000000..b2446e228
 +        pub tm_wday: c_int,
 +        pub tm_yday: c_int,
 +        pub tm_isdst: c_int,
++        pub tm_gmtoff: c_long,
++        pub tm_zone: *const c_char,
 +    }
 +
 +    pub struct siginfo_t {
@@ -388,7 +390,7 @@ index 000000000..b2446e228
 +        pub ai_family: c_int,
 +        pub ai_socktype: c_int,
 +        pub ai_protocol: c_int,
-+        pub ai_addrlen: size_t,
++        pub ai_addrlen: socklen_t,
 +        pub ai_canonname: *mut c_char,
 +        pub ai_addr: *mut sockaddr,
 +        pub ai_next: *mut addrinfo,
@@ -733,7 +735,7 @@ index 000000000..b2446e228
 +// time.h
 +pub const CLOCK_MONOTONIC: clockid_t = 1;
 +pub const CLOCK_REALTIME: clockid_t = 2;
-+pub const CLOCKS_PER_SEC: clock_t = 1000;
++pub const CLOCKS_PER_SEC: clock_t = 1000000;
 +pub const TIME_UTC: c_int = 1;
 +
 +// sys/select.h
