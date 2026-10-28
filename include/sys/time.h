@@ -4,13 +4,10 @@
 #include <time.h>
 #include <sys/select.h>
 
-#ifndef _TIMEZONE_DEFINED // FIXME
-#define _TIMEZONE_DEFINED
 struct timezone {
     int tz_minuteswest;
     int tz_dsttime;
 };
-#endif
 
 #define timercmp(tvp, uvp, cmp) \
     ((tvp)->tv_sec cmp(uvp)->tv_sec || \
