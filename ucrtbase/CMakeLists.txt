@@ -201,6 +201,7 @@ set(SRC_FILES src/ucrtbase.cpp
     src/wcs.cpp
     src/process.cpp
     src/scanf.cpp
+    src/tz.cpp
 )
 
 if(CMAKE_SYSTEM_PROCESSOR STREQUAL x86_64)
