@@ -168,11 +168,14 @@ struct tm* gmtime_r(const time_t* t, struct tm* tm) {
 
 extern "C"
 struct tm* localtime_r(const time_t* t, struct tm* tm) {
-    tzset();
+    auto ret = _localtime64_s(tm, t);
 
-    // FIXME - timezones
+    if (ret) {
+        *_errno() = ret;
+        return nullptr;
+    }
 
-    return gmtime_r(t, tm);
+    return tm;
 }
 
 extern "C"
