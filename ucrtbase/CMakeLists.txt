@@ -201,7 +201,6 @@ set(SRC_FILES src/ucrtbase.cpp
     src/wcs.cpp
     src/process.cpp
     src/scanf.cpp
-    src/tz.cpp
 )
 
 if(CMAKE_SYSTEM_PROCESSOR STREQUAL x86_64)
@@ -225,6 +224,7 @@ target_sources(ucrtbase PUBLIC FILE_SET CXX_MODULES FILES
     src/file.cpp
     src/time.cpp
     src/except.cpp
+    src/tz.cpp
 )
 
 target_compile_options(ucrtbase PRIVATE -fno-exceptions -fno-builtin ${USERSPACE_CFLAGS})

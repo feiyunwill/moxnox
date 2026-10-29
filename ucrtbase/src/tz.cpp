@@ -1,9 +1,13 @@
+module;
+
 #include <stdlib.h>
 #include <string.h>
 #include <string_view>
 #include <span>
 #include <memory>
 #include <bit>
+
+export module tz;
 
 import nt;
 import ntdll;
@@ -20,7 +24,7 @@ extern "C" {
     char* _tzname[] = { (char*)"UTC", (char*)"UTC" };
 }
 
-static RTL_SRWLOCK tz_lock;
+export RTL_SRWLOCK tz_lock;
 static char tz_string[256];
 
 static constexpr uint32_t TZIF_MAGIC = 0x66695a54; // "TZif"
@@ -49,10 +53,10 @@ struct tz_transition {
 };
 
 static unique_ptr<tz_transition[]> tz_transitions_buf;
-static span<tz_transition> tz_transitions;
+export span<tz_transition> tz_transitions;
 static unique_ptr<tzif_time_type[]> tz_types_buf;
-static span<tzif_time_type> tz_types;
-static unique_ptr<char[]> tz_names;
+export span<tzif_time_type> tz_types;
+export unique_ptr<char[]> tz_names;
 
 static bool parse_tzif(span<const uint8_t> data, u16string_view fn) {
     static constexpr size_t TIME_SIZE1 = sizeof(int32_t);
@@ -309,7 +313,7 @@ static bool load_tz_file(string_view fn) {
     return ret;
 }
 
-extern "C"
+export extern "C"
 void _tzset() {
     RtlAcquireSRWLockExclusive(&tz_lock);
 

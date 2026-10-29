@@ -8,17 +8,17 @@ module;
 #include <string_view>
 #include <charconv>
 #include <array>
+#include <optional>
 
 export module time;
 
 import nt;
+import ntdll;
 import ucrtbase;
 import unicode;
+import tz;
 
 using namespace std;
-
-// tz.cpp
-extern "C" void _tzset();
 
 static const unsigned int SYSTEM_TIME_RESOLUTION = 10000000; // 100ns
 
@@ -848,11 +848,50 @@ size_t wcsftime(wchar_t* s, size_t max, const wchar_t* format, const struct tm* 
 
 extern "C"
 errno_t __localtime64_s(struct tm* tm, const __time64_t* t) {
+    auto v = *t;
+    decltype(tz_types)::pointer tt = nullptr;
+
     _tzset();
 
-    // FIXME - get and parse timezone
+    RtlAcquireSRWLockShared(&tz_lock);
 
-    return __gmtime64_s(tm, t);
+    if (tz_transitions.size() > 0) {
+        optional<size_t> trans_num;
+
+        if (*t < tz_transitions[0].time)
+            tt = &tz_types[0];
+        else {
+            for (size_t i = 1; i < tz_transitions.size(); i++) {
+                if (*t < tz_transitions[i].time) {
+                    trans_num = i - 1;
+                    break;
+                }
+            }
+
+            // FIXME - parse footer if after last transition
+
+            if (!trans_num.has_value())
+                trans_num = tz_transitions.size() - 1;
+
+            tt = &tz_types[tz_transitions[*trans_num].type];
+        }
+    } else if (!tz_types.empty())
+        tt = &tz_types[0];
+
+    if (tt)
+        v += tt->utoff;
+
+    auto ret = constexpr__gmtime64_s(tm, v);
+
+    if (tt) {
+        tm->tm_isdst = tt->dst;
+        tm->tm_gmtoff = tt->utoff;
+        tm->tm_zone = &tz_names[tt->idx];
+    }
+
+    RtlReleaseSRWLockShared(&tz_lock);
+
+    return ret;
 }
 
 extern "C"
