@@ -17,6 +17,9 @@ import unicode;
 
 using namespace std;
 
+// tz.cpp
+extern "C" void _tzset();
+
 static const unsigned int SYSTEM_TIME_RESOLUTION = 10000000; // 100ns
 
 static uint64_t init_time;
@@ -847,6 +850,8 @@ size_t wcsftime(wchar_t* s, size_t max, const wchar_t* format, const struct tm* 
 
 extern "C"
 errno_t __localtime64_s(struct tm* tm, const __time64_t* t) {
+    _tzset();
+
     // FIXME - get and parse timezone
 
     return __gmtime64_s(tm, t);
